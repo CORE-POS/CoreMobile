@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="sales">View Sale Items</string>
+	<string name="search">Search for Item</string>
+	<string name="ownersales">For Owners</string>
+	<string name="everyonesales">For Everyone</string>
+	<string name="app_name">CoreMobile</string>
+</resources>
