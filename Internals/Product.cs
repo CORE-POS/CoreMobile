@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Json;
 
 namespace CoreMobileInternals
 {
@@ -73,6 +74,52 @@ namespace CoreMobileInternals
 			output += "__sp" + sale_price + "\r\r";
 			output += "__mp" + member_price;
 			return output;
+		}
+
+		public static List<Product> listFromJson(string json){
+			var lp = new List<Product> ();
+			JsonObject rep = (JsonObject)JsonObject.Parse (json);
+			if (rep.ContainsKey ("results")) {
+				foreach(JsonObject jo in rep["result"]){
+					try{
+						lp.Add (Product.oneFromJson (jo));
+					}
+					catch(Exception){
+					}
+				}
+			}
+			else{
+				try{
+					lp.Add (Product.oneFromJson(rep));
+				}
+				catch(Exception){
+				}
+			}
+			return lp;
+		}
+
+		public static Product oneFromJson(string json){
+			return Product.oneFromJson ((JsonObject)JsonObject.Parse (json));
+		}
+
+		public static Product oneFromJson(JsonObject json){
+			try {
+				Product p = new Product ();
+				p.UPC = json ["upc"];
+				p.description = json ["description"];
+				p.brand = json ["brand"];
+				p.normal_price = double.Parse (json ["normal_price"]);
+				if (json.ContainsKey ("weight"))
+					p.scale = true;
+				if (json.ContainsKey ("sale_price"))
+					p.sale_price = double.Parse (json ["sale_price"]);
+				if (json.ContainsKey ("member_price"))
+					p.member_price = double.Parse (json ["member_price"]);
+				return p;
+			}
+			catch(Exception){
+				throw new Exception ("bad json data for product");
+			}
 		}
 
 		/**

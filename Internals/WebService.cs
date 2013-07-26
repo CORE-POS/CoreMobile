@@ -1,6 +1,7 @@
 using System;
-using System.Json;
 using System.Net;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 using System.IO;
 
@@ -13,22 +14,23 @@ namespace CoreMobileInternals
 		{
 		}
 
-		static public Product get_sales(){
+		static public async Task<List<Product>> get_sales(){
 			string url = "http://10.0.2.2:5000/member_sales/";
 			DataCache dc = new DataCache ();
 			if (dc.get (url) != null)
-				return new Product(dc.get (url));
+				return Product.listFromJson (dc.get (url));
 
-			HttpWebRequest rq = HttpWebRequest.Create (new Uri(url));
-			rq.BeginGetResponse ((ar) => {
-				HttpWebRequest request = (HttpWebRequest)ar.AsyncState;
-				using(HttpWebResponse resp = (HttpWebResponse)request.EndGetResponse (ar)){
-					Stream s = resp.GetResponseStream ();
-					string val = new StreamReader(s).ReadToEnd ();
-					dc.set (url, val);
+			string data = await WebService.stringFromUrl (new Uri(url));
+			dc.set (url, data);
+		
+			return Product.listFromJson (data);
+		}
 
-				}
-			}, rq);
+		static private async Task<string> stringFromUrl(Uri url){
+			var request = (HttpWebRequest)HttpWebRequest.Create (url);
+			WebResponse resp = await request.GetResponseAsync ();
+			Stream s = resp.GetResponseStream ();
+			return new StreamReader(s).ReadToEnd ();
 		}
 	}
 }
