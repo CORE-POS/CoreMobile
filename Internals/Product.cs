@@ -80,7 +80,7 @@ namespace CoreMobileInternals
 			var lp = new List<Product> ();
 			JsonObject rep = (JsonObject)JsonObject.Parse (json);
 			if (rep.ContainsKey ("results")) {
-				foreach(JsonObject jo in rep["result"]){
+				foreach(JsonObject jo in rep["results"]){
 					try{
 						lp.Add (Product.oneFromJson (jo));
 					}
@@ -108,13 +108,13 @@ namespace CoreMobileInternals
 				p.UPC = json ["upc"];
 				p.description = json ["description"];
 				p.brand = json ["brand"];
-				p.normal_price = double.Parse (json ["normal_price"]);
+				p.normal_price = double.Parse (json ["price"].ToString ());
 				if (json.ContainsKey ("weight"))
 					p.scale = true;
-				if (json.ContainsKey ("sale_price"))
-					p.sale_price = double.Parse (json ["sale_price"]);
-				if (json.ContainsKey ("member_price"))
-					p.member_price = double.Parse (json ["member_price"]);
+				if (json.ContainsKey ("salePrice"))
+					p.sale_price = double.Parse (json ["salePrice"].ToString ());
+				if (json.ContainsKey ("memberPrice"))
+					p.member_price = double.Parse (json ["memberPrice"].ToString ());
 				return p;
 			}
 			catch(Exception){

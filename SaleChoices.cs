@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -23,27 +24,33 @@ namespace CoreMobile
 			SetContentView (Resource.Layout.SaleChoices);
 
 			var btn = FindViewById<Button> (Resource.Id.ownerSaleButton);
-			btn.Click += (sender, e) => {
-				var next = new Intent(this, typeof(ProductList));
-				List<Product> lp = Product.test_list ();
+			btn.Click += async (sender, e) => {
+				Task<List<Product>> getTask = WebService.get_member_sales ();
+				List<Product> lp = await getTask;
 				string[] data = new string[lp.Count ()];
 				for(int i=0; i < lp.Count (); i++){
 					data[i] = lp.ElementAt (i).serialize ();
 				}
-				next.PutExtra ("productList", data);
-				StartActivity (next);
+				if (lp.Count > 0){
+					var next = new Intent(this, typeof(ProductList));
+					next.PutExtra ("productList", data);
+					StartActivity (next);
+				}
 			};
 
 			btn = FindViewById<Button>(Resource.Id.everyoneSaleButton);
-			btn.Click += (sender, e) => {
-				var next = new Intent(this, typeof(ProductList));
-				List<Product> lp = Product.test_list ();
+			btn.Click += async (sender, e) => {
+				Task<List<Product>> getTask = WebService.get_sales ();
+				List<Product> lp = await getTask;
 				string[] data = new string[lp.Count ()];
 				for(int i=0; i < lp.Count (); i++){
 					data[i] = lp.ElementAt (i).serialize ();
 				}
-				next.PutExtra ("productList", data);
-				StartActivity (next);
+				if (lp.Count > 0){
+					var next = new Intent(this, typeof(ProductList));
+					next.PutExtra ("productList", data);
+					StartActivity (next);
+				}
 			};
 		}
 	}
