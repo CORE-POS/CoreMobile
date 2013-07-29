@@ -48,6 +48,38 @@ namespace CoreMobileInternals
 			}
 		}
 
+		static public async Task<List<Product>> get_item(string upc){
+			string url = SERVER_URL + "/item/"+upc;
+			DataCache dc = new DataCache ();
+			if (dc.get (url) != null)
+				return Product.listFromJson (dc.get (url));
+
+			try {
+				string data = await WebService.stringFromUrl (new Uri(url));
+				dc.set (url, data);
+				return Product.listFromJson (data);
+			}
+			catch(System.Net.WebException){
+				return new List<Product>();
+			}
+		}
+
+		static public async Task<List<Product>> search_items(string searchTerm){
+			string url = SERVER_URL + "/search/"+searchTerm;
+			DataCache dc = new DataCache ();
+			if (dc.get (url) != null)
+				return Product.listFromJson (dc.get (url));
+
+			try {
+				string data = await WebService.stringFromUrl (new Uri(url));
+				dc.set (url, data);
+				return Product.listFromJson (data);
+			}
+			catch(System.Net.WebException){
+				return new List<Product>();
+			}
+		}
+
 		static private async Task<string> stringFromUrl(Uri url){
 			var request = (HttpWebRequest)HttpWebRequest.Create (url);
 			WebResponse resp = await request.GetResponseAsync ();

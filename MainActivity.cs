@@ -25,6 +25,10 @@ namespace CoreMobile
 				StartActivity (typeof(SaleChoices));
 			};
 
+			var searchBtn = FindViewById<Button> (Resource.Id.searchButton);
+			searchBtn.Click += (sender, e) => {
+				StartActivity (typeof(ItemSearchActivity));
+			};
 		}
 	}
 }

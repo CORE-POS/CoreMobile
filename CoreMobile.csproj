@@ -53,6 +53,7 @@
     <Compile Include="ProductList.cs" />
     <Compile Include="Internals\DataCache.cs" />
     <Compile Include="Internals\WebService.cs" />
+    <Compile Include="ItemSearchActivity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -66,6 +67,7 @@
     <AndroidResource Include="Resources\layout\SaleChoices.axml" />
     <AndroidResource Include="Resources\layout\ProductList.axml" />
     <AndroidResource Include="Resources\layout\ProductListItem.axml" />
+    <AndroidResource Include="Resources\layout\ItemSearch.axml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup>
